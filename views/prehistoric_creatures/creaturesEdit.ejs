@@ -1,8 +1,7 @@
 <h1>Info about CREATURE w/ ID of: <%= creatureId %> </h1>
 
-<form action="GET" method="/prehistoric_creatures">
-    <label for="change">Change Characteristics:</label>
-    <input type="text" name="change" id="change">
+<form action="/prehistoric_creatures/<%= creatureId %>/?_method=PUT" method="POST">
+    <label for="type">Change Characteristics:</label>
+    <input type="text" name="type" id="type" value="<%= creature.type  %> ">
     <input type="submit">
 </form>
-

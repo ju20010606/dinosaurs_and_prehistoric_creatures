@@ -2,7 +2,10 @@ const express = require('express')
 const app = express()
 const ejsLayouts = require('express-ejs-layouts')
 const fs = require('fs')
+const methodOverride = require('method-override')
 
+
+app.use(methodOverride('_method'))
 app.set('view engine','ejs')
 app.use(ejsLayouts)
 
@@ -19,6 +22,17 @@ app.get('/prehistoric_creatures',(req,res)=>{
     let prehistoricCreatures = fs.readFileSync('./prehistoric_creatures.json')
     let prehistoricData = JSON.parse(prehistoricCreatures)
     res.render('prehistoric_creatures/creatures',{prehistoric_creatures:prehistoricData})
+})
+
+app.put('/prehistoric_creatures/:idx',(req,res)=>{
+    let prehistoricCreatures = fs.readFileSync('./prehistoric_creatures.json')
+    let prehistoricData = JSON.parse(prehistoricCreatures)
+
+    prehistoricData[req.params.idx].type = req.body.type
+
+    res.redirect('/prehistoric_creatures')
+
+    fs.writeFileSync('./prehistoric_creatures.json', JSON.stringify(prehistoricData))
 })
 
 app.get('/prehistoric_creatures/new', (req,res)=>{
@@ -52,7 +66,7 @@ app.get('/prehistoric_creatures/edit/:idx', (req,res)=>{
     let prehistoricData = JSON.parse(prehistoricCreatures)
     //get array index from url parameter
     let creatureIndex = parseInt(req.params.idx)
-    console.log(req.body.change)
+    console.log()
     res.render('prehistoric_creatures/creaturesEdit', {creature: prehistoricData[creatureIndex], creatureId: creatureIndex})
 })
 
